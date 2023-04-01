@@ -101,7 +101,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        com.mycompany.app.App
+                                        com.mycompany.actions.api.App
                                     </mainClass>
                                 </manifest>
                             </archive>

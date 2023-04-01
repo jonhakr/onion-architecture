@@ -1,14 +1,18 @@
-package com.mycompany.app;
+package com.mycompany.actions.api;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mycompany.database.DatabaseClient;
-import com.mycompany.financial_api.Company;
-import com.mycompany.financial_api.FinancialAPIClient;
-import com.mycompany.services.DatasetService;
+import com.mycompany.calculations.DatasetCalculations;
+import com.mycompany.calculations.DatasetMapper;
+import com.mycompany.calculations.InstantTypeAdapter;
+import com.mycompany.data.ValidationException;
+import com.mycompany.actions.database.DatabaseClient;
+import com.mycompany.data.Company;
+import com.mycompany.actions.financial_api.FinancialAPIClient;
+import com.mycompany.calculations.DatasetService;
 import java.time.Instant;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -90,17 +94,16 @@ public class App {
         (request, response) -> {
           logger.atInfo().log("GET /recommendation");
           var id = request.queryParams("dataset");
-          var companyListOpt = datasetService.getRecommendation(id);
-          return companyListOpt
-              .map(
-                  companyList ->
-                      companyList.stream().map(Company::getSymbol).collect(Collectors.toList()))
-              .map(
-                  companyList -> {
-                    response.type(json);
-                    return gson.toJson(companyList);
-                  })
-              .orElseGet(() -> "invalid dataset id: " + id);
+          var datasetId = DatasetCalculations.parseDatasetId(id);
+          if (datasetId.isEmpty())
+              return "invalid dataset id: " + id;
+          var dataset = databaseClient.getDataset(datasetId.get());
+          if (dataset.isEmpty())
+            return "No dataset with id: " + id;
+
+          var companySymbols = DatasetCalculations.top5CompaniesBySymbol(dataset.get());
+          response.type(json);
+          return DatasetMapper.toResponse(companySymbols);
         });
   }
 }

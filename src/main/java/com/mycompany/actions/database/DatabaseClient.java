@@ -1,14 +1,16 @@
-package com.mycompany.database;
+package com.mycompany.actions.database;
 
 import static java.util.Collections.emptyList;
 
-import com.mycompany.financial_api.Company;
+import com.mycompany.data.Company;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.mycompany.data.Dataset;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.mapper.reflect.BeanMapper;
 

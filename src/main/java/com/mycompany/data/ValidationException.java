@@ -1,4 +1,4 @@
-package com.mycompany.app;public class ValidationException extends Exception {
+package com.mycompany.data;public class ValidationException extends Exception {
   public ValidationException(String message, Throwable cause) {
     super(message, cause);
   }

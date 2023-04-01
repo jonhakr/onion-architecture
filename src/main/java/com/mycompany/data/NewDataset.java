@@ -1,4 +1,4 @@
-package com.mycompany.services;
+package com.mycompany.data;
 
 import java.util.List;
 

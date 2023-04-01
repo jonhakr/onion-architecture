@@ -1,4 +1,4 @@
-package com.mycompany.financial_api;
+package com.mycompany.data;
 
 public class Company {
   String symbol;

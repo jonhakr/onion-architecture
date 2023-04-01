@@ -1,6 +1,5 @@
-package com.mycompany.database;
+package com.mycompany.data;
 
-import com.mycompany.financial_api.Company;
 import java.time.Instant;
 import java.util.List;
 

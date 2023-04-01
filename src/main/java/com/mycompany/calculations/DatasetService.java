@@ -1,14 +1,15 @@
-package com.mycompany.services;
+package com.mycompany.calculations;
 
 import static java.util.Comparator.comparingDouble;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.mycompany.app.ValidationException;
-import com.mycompany.database.DatabaseClient;
-import com.mycompany.database.Dataset;
-import com.mycompany.financial_api.Company;
-import com.mycompany.financial_api.FinancialAPIClient;
+import com.mycompany.data.NewDataset;
+import com.mycompany.data.ValidationException;
+import com.mycompany.actions.database.DatabaseClient;
+import com.mycompany.data.Dataset;
+import com.mycompany.data.Company;
+import com.mycompany.actions.financial_api.FinancialAPIClient;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -83,28 +84,5 @@ public class DatasetService {
 
   public List<Integer> getDatasetIds() {
     return databaseClient.getDatasetIds();
-  }
-
-  public Optional<List<Company>> getRecommendation(String id) {
-    return parseDatasetId(id).flatMap(databaseClient::getDataset).map(this::top5Companies);
-  }
-
-  private List<Company> top5Companies(Dataset dataset) {
-    return dataset.getCompanies().stream()
-        .sorted(comparingDouble(DatasetService::priceToEarnings))
-        .limit(5)
-        .collect(Collectors.toList());
-  }
-
-  private static double priceToEarnings(Company company1) {
-    return company1.getPrice() / company1.getEarningsPerShare();
-  }
-
-  private Optional<Integer> parseDatasetId(String id) {
-    try {
-      return Optional.of(Integer.parseInt(id));
-    } catch (NumberFormatException e) {
-      return Optional.empty();
-    }
   }
 }

@@ -1,4 +1,4 @@
-package com.mycompany.app;
+package com.mycompany.calculations;
 
 import com.google.gson.*;
 import java.lang.reflect.Type;
